@@ -22,7 +22,7 @@ export default function Header({ isHealthy, onRefresh, isRefreshing }) {
       <div className="header-actions">
         <span className={`status-badge ${isHealthy ? 'healthy' : 'offline'}`}>
           <span className="status-dot"></span>
-          {isHealthy ? 'Backend Connected (:5000)' : 'Backend Disconnected'}
+          {isHealthy ? 'Backend Connected' : 'Backend Disconnected'}
         </span>
 
         <button

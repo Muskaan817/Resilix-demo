@@ -18,7 +18,7 @@ resilix-demo/
 ├── backend/                    # Express.js REST API with Resilix retry orchestration
 │   ├── src/
 │   │   ├── app.js              # Express application assembly & route mounting
-│   │   ├── server.js           # Server bootstrap (default port: 5000)
+│   │   ├── server.js           # Server bootstrap (default port: 5001)
 │   │   ├── verify.js           # Automated end-to-end integration test runner
 │   │   ├── config/             # Dynamic runtime retry configuration
 │   │   ├── controllers/        # Request handlers (users, products, orders, stats)
@@ -34,7 +34,7 @@ resilix-demo/
 │   │   ├── components/         # Modular UI panels (Metrics, Testing, Config, Logs, Viewer)
 │   │   ├── services/           # Backend API client
 │   │   └── styles/             # Dark developer-centric UI design system
-│   ├── vite.config.js          # Vite config with backend proxy (:3000 -> :5000)
+│   ├── vite.config.js          # Vite config with backend proxy (:3000 -> :5001)
 │   └── package.json            # Frontend dependencies (React 18, Vite)
 │
 └── package.json                # Root orchestration scripts
@@ -112,7 +112,7 @@ cp .env.example .env
 
 Default settings in `.env`:
 ```ini
-PORT=5000
+PORT=5001
 DEFAULT_MAX_RETRIES=3
 DEFAULT_INITIAL_DELAY=300
 DEFAULT_MAX_DELAY=5000
@@ -131,7 +131,7 @@ You can start the backend and frontend in separate terminals:
 **Terminal 1 (Backend API):**
 ```bash
 npm run start:backend
-# Starts Express server on http://localhost:5000
+# Starts Express server on http://localhost:5001
 ```
 
 **Terminal 2 (Frontend Dashboard):**
