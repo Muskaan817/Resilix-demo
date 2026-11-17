@@ -51,8 +51,14 @@ export default function ResponseViewer({ response }) {
       <div style={{ marginBottom: '10px', fontSize: '12px', color: 'var(--text-secondary)', display: 'flex', gap: '14px' }}>
         <span>Endpoint: <code style={{ color: '#fff' }}>/{endpoint}</code></span>
         <span>Scenario: <code style={{ color: '#fff' }}>{scenario}</code></span>
-        {data?.retryMeta && (
-          <span>Attempts: <code style={{ color: '#38bdf8' }}>{data.retryMeta.attempts}</code></span>
+        {data?.attempts !== undefined && (
+          <span>Attempts: <code style={{ color: '#38bdf8' }}>{data.attempts}</code></span>
+        )}
+        {data?.retries !== undefined && (
+          <span>Retries: <code style={{ color: '#f59e0b' }}>{data.retries}</code></span>
+        )}
+        {data?.recoveredAfterRetry && (
+          <span style={{ color: '#06b6d4', fontWeight: 600 }}>[Recovered via retry]</span>
         )}
       </div>
 
