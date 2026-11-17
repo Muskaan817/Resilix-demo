@@ -126,8 +126,17 @@ DEFAULT_FAILURE_PROBABILITY=0.6
 
 ### 3. Running the Application
 
-You can start the backend and frontend in separate terminals:
+#### Option A: Single Command (Runs both Backend & Frontend)
+From the project root:
+```bash
+npm start
+# or npm run dev
+```
+This starts:
+- Express backend API on **http://localhost:5001**
+- React Vite dashboard on **http://localhost:3000**
 
+#### Option B: Separate Terminals
 **Terminal 1 (Backend API):**
 ```bash
 npm run start:backend

@@ -4,6 +4,8 @@
   "description": "Production demo application demonstrating the Resilix retry & resilience package in a full-stack Node.js and React architecture",
   "private": true,
   "scripts": {
+    "start": "node start-demo.js",
+    "dev": "node start-demo.js",
     "start:backend": "cd backend && npm start",
     "start:frontend": "cd frontend && npm run dev",
     "test": "cd backend && npm test",
