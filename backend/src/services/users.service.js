@@ -1,0 +1,87 @@
+/**
+ * Users service demonstrating Resilix retry
+ */
+
+// Import Resilix strictly through its public package interface
+const { retry } = require('resilix');
+const { USERS_DATA, simulateExternalCall } = require('./mockDatabase.service');
+const { getConfig } = require('../config/retryConfig');
+const {
+  recordRequestStart,
+  recordAttempt,
+  recordRetry,
+  recordSuccess,
+  recordFailure,
+} = require('./stats.service');
+
+/**
+ * Fetches user data using Resilix retry engine
+ *
+ * @param {string} requestId - Trace identifier for request
+ * @param {object} [overrideOptions] - Optional per-request scenario overrides
+ * @returns {Promise<object>}
+ */
+async function getUsersWithRetry(requestId, overrideOptions = {}) {
+  const config = { ...getConfig(), ...overrideOptions };
+  const startTime = Date.now();
+  const endpoint = 'GET /users';
+
+  recordRequestStart(requestId, endpoint);
+  let attemptsMade = 0;
+
+  try {
+    const data = await retry(
+      async (ctx) => {
+        attemptsMade = ctx.attempt;
+        recordAttempt(requestId, endpoint, ctx.attempt);
+
+        // Execute external simulated call
+        await simulateExternalCall('UsersDatabase', ctx.attempt, {
+          scenario: config.scenario,
+          failureProbability: config.failureProbability,
+          baseLatency: 90,
+        });
+
+        return USERS_DATA;
+      },
+      {
+        maxRetries: config.maxRetries,
+        initialDelay: config.initialDelay,
+        maxDelay: config.maxDelay,
+        strategy: config.strategy,
+        factor: config.factor,
+        jitter: config.jitter,
+        timeout: config.timeout,
+        name: 'fetchUsers',
+        onRetry: (err, meta) => {
+          recordRetry(requestId, endpoint, err, meta);
+        },
+      }
+    );
+
+    const responseTimeMs = Date.now() - startTime;
+    recordSuccess(requestId, endpoint, attemptsMade, responseTimeMs);
+
+    return {
+      requestId,
+      endpoint,
+      success: true,
+      data,
+      attempts: attemptsMade,
+      retries: Math.max(0, attemptsMade - 1),
+      firstAttemptSuccess: attemptsMade === 1,
+      recoveredAfterRetry: attemptsMade > 1,
+      responseTimeMs,
+      strategyUsed: config.strategy,
+      scenarioApplied: config.scenario,
+    };
+  } catch (error) {
+    const responseTimeMs = Date.now() - startTime;
+    recordFailure(requestId, endpoint, attemptsMade || 1, error, responseTimeMs);
+    throw error;
+  }
+}
+
+module.exports = {
+  getUsersWithRetry,
+};
