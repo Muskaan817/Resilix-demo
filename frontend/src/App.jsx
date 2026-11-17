@@ -29,7 +29,11 @@ export default function App() {
         fetchHealth().catch(() => null),
         fetchStats().catch(() => null),
       ]);
-      setIsHealthy(Boolean(healthData && healthData.status === 'ok'));
+      const healthy = Boolean(
+        (healthData && (healthData.status === 'healthy' || healthData.status === 'ok' || healthData.ok)) ||
+        statsData
+      );
+      setIsHealthy(healthy);
       if (statsData) {
         setStats(statsData);
       }

@@ -38,6 +38,7 @@ function resetStatsController(req, res) {
 function getHealthController(req, res) {
   res.status(200).json({
     status: 'healthy',
+    ok: true,
     timestamp: new Date().toISOString(),
     uptimeSeconds: Math.floor(process.uptime()),
     nodeVersion: process.version,
