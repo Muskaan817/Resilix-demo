@@ -29,9 +29,10 @@ export default function ActivityLog({ logs }) {
               className={`btn btn-subtle ${filter === tab ? 'active' : ''}`}
               style={{
                 fontSize: '11px',
-                padding: '4px 8px',
-                borderColor: filter === tab ? 'var(--color-cyan)' : 'var(--border-subtle)',
-                color: filter === tab ? 'var(--color-cyan)' : 'var(--text-secondary)',
+                padding: '3px 8px',
+                borderColor: filter === tab ? 'var(--accent-blue)' : 'var(--border-hairline)',
+                color: filter === tab ? '#ffffff' : 'var(--text-secondary)',
+                background: filter === tab ? 'rgba(56, 139, 253, 0.15)' : 'transparent',
               }}
             >
               {tab}

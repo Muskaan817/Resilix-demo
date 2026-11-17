@@ -52,13 +52,13 @@ export default function ResponseViewer({ response }) {
         <span>Endpoint: <code style={{ color: '#fff' }}>/{endpoint}</code></span>
         <span>Scenario: <code style={{ color: '#fff' }}>{scenario}</code></span>
         {data?.attempts !== undefined && (
-          <span>Attempts: <code style={{ color: '#38bdf8' }}>{data.attempts}</code></span>
+          <span>Attempts: <code style={{ color: 'var(--accent-blue)' }}>{data.attempts}</code></span>
         )}
         {data?.retries !== undefined && (
-          <span>Retries: <code style={{ color: '#f59e0b' }}>{data.retries}</code></span>
+          <span>Retries: <code style={{ color: 'var(--accent-amber)' }}>{data.retries}</code></span>
         )}
         {data?.recoveredAfterRetry && (
-          <span style={{ color: '#06b6d4', fontWeight: 600 }}>[Recovered via retry]</span>
+          <span style={{ color: 'var(--accent-green)', fontWeight: 500 }}>[Recovered via retry]</span>
         )}
       </div>
 

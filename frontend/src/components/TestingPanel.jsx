@@ -7,29 +7,33 @@ export default function TestingPanel({ onExecute, onReset, isRunning }) {
     {
       id: 'immediate_success',
       title: 'Immediate Success',
-      desc: 'Succeeds on Attempt #1 (0 retries)',
+      tag: '0 RETRIES',
+      desc: 'Succeeds on Attempt #1 without delay',
       btnClass: 'btn-success',
       icon: '✓',
     },
     {
       id: 'fail_twice_then_succeed',
-      title: 'Fail Twice, Then Recover',
-      desc: 'Fails attempts 1 & 2, succeeds on 3 via retry',
+      title: 'Transient Failure',
+      tag: 'RECOVERS',
+      desc: 'Fails attempts 1 & 2, recovers on #3',
       btnClass: 'btn-warning',
       icon: '↻',
     },
     {
       id: 'fail_all',
-      title: 'Exhaust All Retries',
-      desc: 'Fails every attempt, throws ResilixError',
+      title: 'Persistent Outage',
+      tag: 'EXHAUSTS 503',
+      desc: 'Fails all retries, returns ResilixError',
       btnClass: 'btn-danger',
       icon: '✕',
     },
     {
       id: 'probabilistic',
-      title: 'Probabilistic Simulation',
-      desc: 'Uses configured failure probability',
-      btnClass: 'btn-primary',
+      title: 'Probabilistic Flakiness',
+      tag: 'CONFIG RATE',
+      desc: 'Simulates random real-world network drops',
+      btnClass: 'btn-scenario-blue',
       icon: '⚡',
     },
   ];
@@ -38,10 +42,10 @@ export default function TestingPanel({ onExecute, onReset, isRunning }) {
     <div className="panel-box">
       <div className="panel-header">
         <h2 className="panel-heading">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
           </svg>
-          Interactive Resilience Tester
+          Fault Injection & Testing
         </h2>
         <button
           className="btn btn-subtle"
@@ -49,12 +53,12 @@ export default function TestingPanel({ onExecute, onReset, isRunning }) {
           disabled={isRunning}
           title="Reset all request counters and activity logs"
         >
-          Reset Stats
+          Reset Metrics
         </button>
       </div>
 
-      <div style={{ marginBottom: '18px' }}>
-        <div className="form-label" style={{ marginBottom: '8px' }}>Select Target Service Endpoint:</div>
+      <div style={{ marginBottom: '16px' }}>
+        <div className="form-label" style={{ marginBottom: '6px' }}>Target Service Route:</div>
         <div style={{ display: 'flex', gap: '8px' }}>
           {[
             { id: 'users', label: 'GET /users', desc: 'User profiles database' },
@@ -65,7 +69,7 @@ export default function TestingPanel({ onExecute, onReset, isRunning }) {
               key={ep.id}
               onClick={() => setActiveEndpoint(ep.id)}
               className={`btn ${activeEndpoint === ep.id ? 'btn-primary' : 'btn-subtle'}`}
-              style={{ flex: 1, fontSize: '12px', padding: '8px 12px' }}
+              style={{ flex: 1, fontSize: '11.5px', padding: '6px 10px' }}
             >
               {ep.label}
             </button>
@@ -74,28 +78,33 @@ export default function TestingPanel({ onExecute, onReset, isRunning }) {
       </div>
 
       <div>
-        <div className="form-label" style={{ marginBottom: '8px' }}>Trigger Retry Scenario:</div>
+        <div className="form-label" style={{ marginBottom: '6px' }}>Simulate Resilience Scenarios:</div>
         <div className="scenario-button-grid">
           {scenarios.map((sc) => (
             <button
               key={sc.id}
               onClick={() => onExecute(activeEndpoint, sc.id)}
               disabled={isRunning}
-              className={`btn ${sc.btnClass}`}
-              style={{
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'flex-start',
-                textAlign: 'left',
-                padding: '12px 14px',
-                height: 'auto',
-              }}
+              className={`btn-scenario ${sc.btnClass}`}
             >
-              <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontWeight: 700, fontSize: '13px' }}>
-                <span>{sc.icon}</span>
-                <span>{sc.title}</span>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%', marginBottom: '4px' }}>
+                <span style={{ fontWeight: 600, fontSize: '12.5px', color: '#f0f6fc', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                  <span>{sc.icon}</span>
+                  <span>{sc.title}</span>
+                </span>
+                <span style={{
+                  fontSize: '9.5px',
+                  fontFamily: 'var(--font-mono)',
+                  padding: '1px 5px',
+                  borderRadius: '3px',
+                  background: 'rgba(255, 255, 255, 0.08)',
+                  color: '#c9d1d9',
+                  letterSpacing: '0.04em'
+                }}>
+                  {sc.tag}
+                </span>
               </div>
-              <span style={{ fontSize: '11px', opacity: 0.85, marginTop: '4px', fontWeight: 400 }}>
+              <span style={{ fontSize: '11px', color: 'var(--text-secondary)', lineHeight: 1.3 }}>
                 {sc.desc}
               </span>
             </button>
@@ -106,18 +115,19 @@ export default function TestingPanel({ onExecute, onReset, isRunning }) {
       {isRunning && (
         <div style={{
           marginTop: '12px',
-          padding: '10px 14px',
-          background: 'rgba(59, 130, 246, 0.1)',
-          border: '1px solid rgba(59, 130, 246, 0.3)',
-          borderRadius: '8px',
+          padding: '8px 12px',
+          background: 'rgba(56, 139, 253, 0.1)',
+          border: '1px solid rgba(56, 139, 253, 0.3)',
+          borderRadius: '6px',
           display: 'flex',
           alignItems: 'center',
-          gap: '10px',
-          fontSize: '12px',
-          color: '#93c5fd'
+          gap: '8px',
+          fontSize: '11.5px',
+          color: '#79c0ff',
+          fontFamily: 'var(--font-mono)'
         }}>
-          <span className="status-dot" style={{ backgroundColor: '#3b82f6' }}></span>
-          <span>Resilix is handling operation execution and backing off between retries...</span>
+          <span className="status-dot" style={{ backgroundColor: '#388bfd' }}></span>
+          <span>Resilix retry engine in flight... backing off between attempts</span>
         </div>
       )}
     </div>

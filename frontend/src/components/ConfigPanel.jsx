@@ -197,7 +197,7 @@ export default function ConfigPanel({ currentConfig, onUpdateConfig, isUpdating 
               step="0.05"
               value={form.failureProbability}
               onChange={handleChange}
-              style={{ width: '100%', accentColor: 'var(--color-cyan)', marginTop: '6px' }}
+              style={{ width: '100%', accentColor: 'var(--accent-blue)', marginTop: '6px' }}
             />
           </div>
 
@@ -208,22 +208,23 @@ export default function ConfigPanel({ currentConfig, onUpdateConfig, isUpdating 
                 name="jitter"
                 checked={form.jitter}
                 onChange={handleChange}
-                style={{ width: '16px', height: '16px', accentColor: 'var(--color-cyan)' }}
+                style={{ width: '15px', height: '15px', accentColor: 'var(--accent-blue)' }}
               />
-              <span>Enable Full Jitter (Prevents thundering herds)</span>
+              <span>Full Jitter (Prevents thundering herds)</span>
             </label>
           </div>
         </div>
 
         {feedback && (
           <div style={{
-            marginTop: '14px',
+            marginTop: '12px',
             padding: '8px 12px',
             borderRadius: '6px',
-            fontSize: '12px',
-            backgroundColor: feedback.type === 'success' ? 'rgba(16, 185, 129, 0.15)' : 'rgba(244, 63, 94, 0.15)',
-            color: feedback.type === 'success' ? 'var(--color-emerald)' : 'var(--color-rose)',
-            border: `1px solid ${feedback.type === 'success' ? 'rgba(16, 185, 129, 0.3)' : 'rgba(244, 63, 94, 0.3)'}`,
+            fontSize: '11.5px',
+            backgroundColor: feedback.type === 'success' ? 'rgba(46, 160, 67, 0.12)' : 'rgba(248, 81, 73, 0.12)',
+            color: feedback.type === 'success' ? '#3fb950' : '#f85149',
+            border: `1px solid ${feedback.type === 'success' ? 'rgba(46, 160, 67, 0.3)' : 'rgba(248, 81, 73, 0.3)'}`,
+            fontFamily: 'var(--font-mono)'
           }}>
             {feedback.message}
           </div>
